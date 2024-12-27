@@ -16,20 +16,31 @@ struct Person {
     preference_1: f64,
     preference_2: f64,
     preference_3: f64,
-    Pronouns: f64,                  // 1 for he/him, 2 for she/her, 3 for anything else
-    Residential_College: String,    // 
-    Difficulty: f64,                // 1, 2, 3, and 4 for difficulty
-    Days: f64,                 // 1 for no day hikes, 2 for day hikes, 1.1 for indifferent
-    Arts: f64,                 // same as day hikes
-    Gender: bool,
-    Food: bool         // basically true or false
-    Location: f64,                  // weights ASSIGNED based off of geographic location. use a rust
+    Pronouns: String,                  // 1 for he/him, 2 for she/her, 3 for anything else
+    #[serde(default)]PronounsID: f64,
+    #[serde(default)]Residential_College: String,    // 
+    #[serde(default)]Difficulty: f64,                // 1, 2, 3, and 4 for difficulty
+    #[serde(default)]Days: f64,                 // 1 for no day hikes, 2 for day hikes, 1.1 for indifferent
+    #[serde(default)]Arts: f64,                 // same as day hikes
+    #[serde(default)]Gender: bool,
+    #[serde(default)]Food: bool,         // basically true or false
+    #[serde(default)]Location: f64,                  // weights ASSIGNED based off of geographic location. use a rust
                                     // library to compute the distance
-    School: f64,                   // 1 for public and magnet, 2 for private
+    #[serde(default)]School: f64,                   // 1 for public and magnet, 2 for private
 }
 
-fn assignPronouns(Footie: <Vec<Person>>) -> Result<Vec<Person>>, Box<dyn Error> {
-    Ok(())
+fn assignPronouns(footie: &mut Person) {
+    let pronounString = &footie.Pronouns;
+
+    if pronounString == "he/him" || pronounString == "he/they" {
+        footie.PronounsID = 1.0; 
+    }
+    else if pronounString == "she/her" || pronounString == "she/they" {
+        footie.PronounsID = 2.0;
+    }
+    else {
+        footie.PronounsID = 3.0;
+    }
 }
 
 fn read_csv(file_path: &str) -> Result<Vec<Person>, Box<dyn Error>> {
@@ -37,10 +48,10 @@ fn read_csv(file_path: &str) -> Result<Vec<Person>, Box<dyn Error>> {
     let mut people: Vec<Person> = Vec::new();
     
     for result in rdr.deserialize() {
-        let record: Person = result?;
+        let mut record: Person = result?;
+        assignPronouns(&mut record);
         people.push(record);
     }
-    
     Ok(people)
 }
 
@@ -48,15 +59,16 @@ fn calculate_similarity(p1: &Person, p2: &Person) -> f64 {
     let diff_1 = p1.preference_1 - p2.preference_1;
     let diff_2 = p1.preference_2 - p2.preference_2;
     let diff_3 = p1.preference_3 - p2.preference_3;
-    
-    (diff_1.powi(2) + diff_2.powi(2) + diff_3.powi(2)).sqrt()
+    let diff_4 = p1.PronounsID - p2.PronounsID;
+
+    (diff_1.powi(2) + diff_2.powi(2) + diff_3.powi(2) + diff_4.powi(2)).sqrt()
 }
 
 fn group_people(people: Vec<Person>, group_size: usize) -> Vec<Vec<Person>> {
     let mut people = people;
     people.sort_by(|a, b| {
-        let sim_a = a.preference_1.powi(2) + a.preference_2.powi(2) + a.preference_3.powi(2);
-        let sim_b = b.preference_1.powi(2) + b.preference_2.powi(2) + b.preference_3.powi(2);
+        let sim_a = a.preference_1.powi(2) + a.preference_2.powi(2) + a.preference_3.powi(2) + a.PronounsID.powi(2);
+        let sim_b = b.preference_1.powi(2) + b.preference_2.powi(2) + b.preference_3.powi(2) + b.PronounsID.powi(2);
         sim_a.partial_cmp(&sim_b).unwrap()
     });
 
@@ -88,6 +100,7 @@ fn write_groups_to_csv(groups: Vec<Vec<Person>>, file_path: &str) -> Result<(), 
                 group_number,
                 person.id,
                 person.name,
+                person.Pronouns,
                 person.preference_1,
                 person.preference_2,
                 person.preference_3,
@@ -104,9 +117,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let input_file = "/Users/landonhellman/Documents/footie-grouper-rust/examples/example.csv"; // CSV input file with people
                                                                                                 
     let timestamp = Local::now().format("%Y-%m-%d_%H-%M-%S").to_string();
-    let mut output_file_name = format!("/Users/landonhellman/Documents/footie-grouper-rust/outputs/exampleOutput_{}.csv", timestamp);
+    let output_file_name = format!("/Users/landonhellman/Documents/footie-grouper-rust/outputs/exampleOutput_{}.csv", timestamp);
 
-    let mut output_file_false = File::create(output_file_name.clone())?;
+    let output_file_false = File::create(output_file_name.clone())?;
     let output_file: &str = &output_file_name;
 
     let people = read_csv(input_file)?;
