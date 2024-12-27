@@ -1,4 +1,4 @@
 # Ignore the targets, newly generated outputs, and examples
 /target/
-/outputs/
-/examples/
+/outputs
+/examples

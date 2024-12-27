@@ -1,3 +1,3 @@
-id,name,Pronouns,Residential_College,Difficulty,Days,Arts,Gender,Food,Location,School,preference_1,preference_2,preference_3
-1,John Doe,he/him,MY,"Easy: a mellow trip, though still some challenges!","Yes, I am interested in day hikes only","Yes, I am interested in the arts-focused trips only",filler,N/A,Santa Barbara CA,private,1.0,0.0,2.5
-2,Jane Smith,they/them,BR,"Moderate: a few ups and downs, some rough terrain","Yes, I am interested in day hikes only","I am NOT interested in the arts-focused trips.",filler,N/A,New Haven CT,public,1.5,2.5,3.5
+id,name,pronouns,residential_college,difficulty,days,arts,food,location,school,preference_1,preference_2,preference_3
+1,John Doe,he/him,MY,"Easy: a mellow trip, though still some challenges!","Yes, I am interested in day hikes only","Yes, I am interested in the arts-focused trips only",N/A,"Santa Barbara, CA",private,1.0,0.0,2.5
+2,Jane Smith,they/them,BR,"Moderate: a few ups and downs, some rough terrain","Yes, I am interested in day hikes only","I am NOT interested in the arts-focused trips.",N/A,"New Haven, CT",public,1.5,2.5,3.5
