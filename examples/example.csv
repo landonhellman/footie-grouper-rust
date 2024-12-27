@@ -1,5 +1,3 @@
-id,name,Pronouns,preference_1,preference_2,preference_3
-1,Alainey Hellman,she/her,1.0,0.0,2.5
-1,John Doe,he/him,1.0,2.0,3.0
-1,Jane Smith,they/them,1.5,2.5,3.5
-1,Landon Hellman,he/him,2.1,2.4,5.3
+id,name,Pronouns,Residential_College,Difficulty,Days,Arts,Gender,Food,Location,School,preference_1,preference_2,preference_3
+1,John Doe,he/him,MY,"Easy: a mellow trip, though still some challenges!","Yes, I am interested in day hikes only","Yes, I am interested in the arts-focused trips only",filler,N/A,Santa Barbara CA,private,1.0,0.0,2.5
+2,Jane Smith,they/them,BR,"Moderate: a few ups and downs, some rough terrain","Yes, I am interested in day hikes only","I am NOT interested in the arts-focused trips.",filler,N/A,New Haven CT,public,1.5,2.5,3.5

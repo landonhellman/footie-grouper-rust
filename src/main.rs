@@ -16,21 +16,54 @@ struct Person {
     preference_1: f64,
     preference_2: f64,
     preference_3: f64,
+   
     Pronouns: String,                  // 1 for he/him, 2 for she/her, 3 for anything else
     #[serde(default)]PronounsID: f64,
-    #[serde(default)]Residential_College: String,    // 
-    #[serde(default)]Difficulty: f64,                // 1, 2, 3, and 4 for difficulty
-    #[serde(default)]Days: f64,                 // 1 for no day hikes, 2 for day hikes, 1.1 for indifferent
-    #[serde(default)]Arts: f64,                 // same as day hikes
-    #[serde(default)]Gender: bool,
-    #[serde(default)]Food: bool,         // basically true or false
-    #[serde(default)]Location: f64,                  // weights ASSIGNED based off of geographic location. use a rust
+   
+    Residential_College: String,    // 
+   
+    Difficulty: String,                // 1, 2, 3, and 4 for difficulty 
+    #[serde(default)]DifficultyID: f64,
+   
+    Days: String,
+    #[serde(default)]DaysID: f64,                 // 1 for no day hikes, 2 for day hikes, 1.1 for indifferent
+   
+    Arts: String,
+    #[serde(default)]ArtsID: f64,                 // same as day hikes
+   
+    Gender: String, 
+    #[serde(default)]GenderID: f64,
+    
+    Food: String,
+    #[serde(default)]FoodID: f64,         // basically true or false
+    
+    Location: String, 
+    #[serde(default)]LocationID: f64,                  // weights ASSIGNED based off of geographic location. use a rust
                                     // library to compute the distance
-    #[serde(default)]School: f64,                   // 1 for public and magnet, 2 for private
+    
+    School: String, 
+    #[serde(default)]SchoolID: f64,                   // 1 for public and magnet, 2 for private
 }
 
 fn assignPronouns(footie: &mut Person) {
-    let pronounString = &footie.Pronouns;
+    let difficultyString = &footie.Difficulty;
+
+    if difficultyString == "Easy: a mellow trip, though still some challenges!"{
+        footie.DifficultyID = 1.0; 
+    }
+    else if difficultyString == "Moderate: a few ups and downs, some rough terrain" {
+        footie.DifficultyID = 2.0;
+    }
+    else if difficultyString == "Strenuous: some ups and downs, some rough terrain" {
+        footie.DifficultyID = 3.0
+    }
+    else {
+        footie.DifficultyID = 4.0;
+    }
+}
+
+fn assignDifficulty(footie: &mut Person) {
+    let pronounString = &footie.Difficulty;
 
     if pronounString == "he/him" || pronounString == "he/they" {
         footie.PronounsID = 1.0; 
@@ -40,6 +73,34 @@ fn assignPronouns(footie: &mut Person) {
     }
     else {
         footie.PronounsID = 3.0;
+    }
+}
+
+fn assignDays(footie: &mut Person) {
+    let dayString = &footie.Days;
+
+    if dayString == "Yes, I am interested in day hikes only" {
+        footie.DaysID = 1.0; 
+    }
+    else if dayString == "I am NOT interested in day hikes."  {
+        footie.DaysID = 2.0;
+    }
+    else {
+        footie.DaysID = 1.8;
+    }
+}
+
+fn assignArts(footie: &mut Person) {
+    let artString = &footie.Arts;
+
+    if artString == "Yes, I am interested in the arts-focused trips only" {
+        footie.ArtsID = 1.0; 
+    }
+    else if artString == "I am NOT interested in the arts-focused trips."  {
+        footie.ArtsID = 2.0;
+    }
+    else {
+        footie.ArtsID = 1.8;
     }
 }
 
@@ -101,6 +162,14 @@ fn write_groups_to_csv(groups: Vec<Vec<Person>>, file_path: &str) -> Result<(), 
                 person.id,
                 person.name,
                 person.Pronouns,
+                person.Residential_College,
+                person.Difficulty,
+                person.Days,
+                person.Arts,
+                person.Gender,
+                person.Food,
+                person.Location,
+                person.School,
                 person.preference_1,
                 person.preference_2,
                 person.preference_3,
