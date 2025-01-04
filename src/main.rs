@@ -45,7 +45,7 @@ struct Person {
     #[serde(default)] location_id: NominatimResponse, // weights ASSIGNED based off of geographic location.
 
     school: String,
-    #[serde(default)] school_id: f64, // 1 for public and magnet, 2 for private
+    // #[serde(default)] school_id: f64, // 1 for public and magnet, 2 for private
 }
 
 fn assign_difficulty(footie: &mut Person) {
@@ -174,14 +174,14 @@ async fn read_csv(file_path: &str) -> Result<Vec<Person>, Box<dyn Error>> {
     Ok(people)
 }
 
-fn calculate_similarity(p1: &Person, p2: &Person) -> f64 {
-    let diff_1 = p1.preference_1 - p2.preference_1;
-    let diff_2 = p1.preference_2 - p2.preference_2;
-    let diff_3 = p1.preference_3 - p2.preference_3;
-    let diff_4 = p1.pronouns_id - p2.pronouns_id;
+// fn calculate_similarity(p1: &Person, p2: &Person) -> f64 {
+//     let diff_1 = p1.preference_1 - p2.preference_1;
+//     let diff_2 = p1.preference_2 - p2.preference_2;
+//     let diff_3 = p1.preference_3 - p2.preference_3;
+//     let diff_4 = p1.pronouns_id - p2.pronouns_id;
 
-    (diff_1.powi(2) + diff_2.powi(2) + diff_3.powi(2) + diff_4.powi(2)).sqrt()
-}
+//     (diff_1.powi(2) + diff_2.powi(2) + diff_3.powi(2) + diff_4.powi(2)).sqrt()
+// }
 
 fn group_people(people: Vec<Person>, group_size: usize) -> Vec<Vec<Person>> {
     let mut people = people;
